@@ -1,33 +1,32 @@
+// importing currency codes list and API Key 
 import { currency_list, api } from "./currencyCodes.js";
 
-const fromCurrencySelectTag = document.getElementById("fromCurrency");
-const toCurrencySelectTag = document.getElementById("toCurrency");
-const resultTag = document.getElementById("result");
-const btn = document.getElementById("btn");
-const status = document.getElementById("status");
+const fromCurrencySelectTag = document.querySelector("#fromCurrency");
+const toCurrencySelectTag = document.querySelector("#toCurrency");
+const resultTag = document.querySelector("#result");
+const btn = document.querySelector("#btn");
+const status = document.querySelector("#status");
 
+// append the curreny codes list to the list and select defaults 
 currency_list.forEach((code) => {
     const newElement = document.createElement("option");
     newElement.value = code;
     newElement.textContent = code;
 
-    if(code == "USD")
-        newElement.selected = "true";
-    
+    if (code === "USD")
+        newElement.selected = true;
+
     fromCurrencySelectTag.append(newElement);
+
+    const newElementTo = newElement.cloneNode(true);
+
+    if (code === "INR")
+        newElementTo.selected = true;
+
+    toCurrencySelectTag.append(newElementTo);
 });
 
-currency_list.forEach((code) => {
-    const newElement = document.createElement("option");
-    newElement.value = code;
-    newElement.textContent = code;
-
-    if(code == "INR")
-        newElement.selected = "true";
-    
-    toCurrencySelectTag.append(newElement);
-});
-
+// Swap currency on "click" 
 document.getElementById("switchCurrency").onclick = () => {
 
     const fromValue = fromCurrencySelectTag.value;
@@ -36,6 +35,7 @@ document.getElementById("switchCurrency").onclick = () => {
 
 };
 
+// handle "click" event for conversion 
 btn.onclick = () => {
 
     const numberInputField = document.getElementById("userValue");
@@ -49,7 +49,7 @@ btn.onclick = () => {
     else {
         numberInputField.style.border = "1px solid gray";
         resultTag.style.color = "black";
-        status.textContent = "Processing: please have patients...";
+        btn.textContent = "Processing: have patients...";
 
         btn.disabled = true;
         btn.style.color = "gray";
@@ -58,6 +58,8 @@ btn.onclick = () => {
         convertAmount(userEnteredAmount);
     }
 }
+
+// convert the amount to different currency using Fetch API 
 function convertAmount(amount) {
 
     fetchData(`https://v6.exchangerate-api.com/v6/${api}/latest/USD`)
@@ -76,9 +78,12 @@ function convertAmount(amount) {
             btn.disabled = false;
             btn.style.color = "black";
             btn.style.cursor = "pointer";
+            btn.textContent = "Convert";
         })
         .catch(error => console.log(`Additional information about error: ${error}`));
 }
+
+// Fetch API Data with proper validation 
 async function fetchData(url) {
 
     try {
