@@ -15,7 +15,7 @@ currency_list.forEach((code) => {
 const regionNames = new Intl.DisplayNames(
     ['en'], {type: 'currency'}
   );
-    newElement.textContent = code + " -" + regionNames.of(code);
+    newElement.textContent = code + " - " + regionNames.of(code);
 
     if (code === "USD")
         newElement.selected = true;
