@@ -11,7 +11,11 @@ const status = document.querySelector("#status");
 currency_list.forEach((code) => {
     const newElement = document.createElement("option");
     newElement.value = code;
-    newElement.textContent = code;
+// to display currency name with currency code
+const regionNames = new Intl.DisplayNames(
+    ['en'], {type: 'currency'}
+  );
+    newElement.textContent = code + " - " + regionNames.of(code);
 
     if (code === "USD")
         newElement.selected = true;
